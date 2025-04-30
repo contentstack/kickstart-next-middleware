@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import Image from "next/image";
 import { headers } from "next/headers";
 import { Page } from "@/lib/types";
@@ -77,7 +78,9 @@ export default async function Home({
         {page?.rich_text ? (
           <div
             {...(page?.$ && page?.$.rich_text)}
-            dangerouslySetInnerHTML={{ __html: page?.rich_text }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(page?.rich_text),
+            }}
           />
         ) : null}
 
@@ -121,7 +124,9 @@ export default async function Home({
                   {block.copy ? (
                     <div
                       {...(block?.$ && block?.$.copy)}
-                      dangerouslySetInnerHTML={{ __html: block.copy }}
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(block.copy),
+                      }}
                       className="prose"
                     />
                   ) : null}
