@@ -21,6 +21,8 @@
     "@contentstack/live-preview-utils": "^3.2.2",
     "@tailwindcss/postcss": "^4.1.7",
     "@timbenniks/contentstack-endpoints": "^1.0.9",
+    "dompurify": "^3.2.5",
+    "jsdom": "^26.1.0",
     "next": "^15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"

@@ -1,6 +1,8 @@
+import createDOMPurify from "dompurify";
 import Image from "next/image";
 import { headers } from "next/headers";
 import { Page } from "@/lib/types";
+import { JSDOM } from "jsdom";
 
 export default async function Home({
   searchParams,
@@ -30,6 +32,9 @@ export default async function Home({
   };
 
   const page: Page = await getContent();
+
+  const { window } = new JSDOM("");
+  const DOMPurify = createDOMPurify(window);
 
   return (
     <main className="max-w-(--breakpoint-md) mx-auto">
@@ -77,7 +82,9 @@ export default async function Home({
         {page?.rich_text ? (
           <div
             {...(page?.$ && page?.$.rich_text)}
-            dangerouslySetInnerHTML={{ __html: page?.rich_text }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(page?.rich_text),
+            }}
           />
         ) : null}
 
@@ -121,7 +128,9 @@ export default async function Home({
                   {block.copy ? (
                     <div
                       {...(block?.$ && block?.$.copy)}
-                      dangerouslySetInnerHTML={{ __html: block.copy }}
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(block.copy),
+                      }}
                       className="prose"
                     />
                   ) : null}
