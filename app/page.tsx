@@ -1,7 +1,8 @@
-import DOMPurify from "dompurify";
+import createDOMPurify from "dompurify";
 import Image from "next/image";
 import { headers } from "next/headers";
 import { Page } from "@/lib/types";
+import { JSDOM } from "jsdom";
 
 export default async function Home({
   searchParams,
@@ -31,6 +32,9 @@ export default async function Home({
   };
 
   const page: Page = await getContent();
+
+  const { window } = new JSDOM("");
+  const DOMPurify = createDOMPurify(window);
 
   return (
     <main className="max-w-(--breakpoint-md) mx-auto">
