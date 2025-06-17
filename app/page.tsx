@@ -10,7 +10,8 @@ export default async function Home({
   searchParams: Promise<any>;
 }) {
   await headers();
-  let { live_preview, entry_uid, content_type_uid } = await searchParams;
+  let { entry_uid, content_type_uid } = await searchParams;
+  const { live_preview } = await searchParams;
 
   if (!entry_uid) {
     entry_uid = "blte55cf3411ecaee0e";
