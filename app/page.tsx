@@ -1,8 +1,7 @@
-import createDOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
 import { headers } from "next/headers";
 import { Page } from "@/lib/types";
-import { JSDOM } from "jsdom";
 
 export default async function Home({
   searchParams,
@@ -10,7 +9,8 @@ export default async function Home({
   searchParams: Promise<any>;
 }) {
   await headers();
-  let { live_preview, entry_uid, content_type_uid } = await searchParams;
+  let { entry_uid, content_type_uid } = await searchParams;
+  const { live_preview } = await searchParams;
 
   if (!entry_uid) {
     entry_uid = "blte55cf3411ecaee0e";
@@ -32,9 +32,6 @@ export default async function Home({
   };
 
   const page: Page = await getContent();
-
-  const { window } = new JSDOM("");
-  const DOMPurify = createDOMPurify(window);
 
   return (
     <main className="max-w-(--breakpoint-md) mx-auto">
