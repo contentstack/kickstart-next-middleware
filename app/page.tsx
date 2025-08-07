@@ -9,13 +9,11 @@ export default async function Home({
   searchParams: Promise<any>;
 }) {
   await headers();
-  let { entry_uid, content_type_uid } = await searchParams;
+  let { url, content_type_uid } = await searchParams;
   const { live_preview } = await searchParams;
 
-  if (!entry_uid) {
-    entry_uid =
-      (process.env.NEXT_PUBLIC_CONTENTSTACK_CONTENT_TYPE_UID as string) ||
-      "blte55cf3411ecaee0e";
+  if (!url) {
+    url = "/"; // Default to home page URL
   }
 
   if (!content_type_uid) {
@@ -26,8 +24,12 @@ export default async function Home({
     const result = await fetch(
       // This could be any external URL
       live_preview
-        ? `http://localhost:3000/api/middleware?content_type_uid=${content_type_uid}&entry_uid=${entry_uid}&live_preview=${live_preview}`
-        : `http://localhost:3000/api/middleware?content_type_uid=${content_type_uid}&entry_uid=${entry_uid}`
+        ? `http://localhost:3000/api/middleware?content_type_uid=${content_type_uid}&url=${encodeURIComponent(
+            url
+          )}&live_preview=${live_preview}`
+        : `http://localhost:3000/api/middleware?content_type_uid=${content_type_uid}&url=${encodeURIComponent(
+            url
+          )}`
     );
 
     return await result.json();
@@ -47,7 +49,7 @@ export default async function Home({
               content_type_uid: <code>{content_type_uid}</code>
             </li>
             <li>
-              entry_uid: <code>{entry_uid}</code>
+              url: <code>{url}</code>
             </li>
           </ul>
         ) : null}
