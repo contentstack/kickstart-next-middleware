@@ -20,7 +20,7 @@
     "@contentstack/delivery-sdk": "^4.8.0",
     "@contentstack/live-preview-utils": "^3.4.0",
     "@tailwindcss/postcss": "^4.1.11",
-    "@timbenniks/contentstack-endpoints": "^1.0.13",
+    "@timbenniks/contentstack-endpoints": "^1.0.14",
     "dompurify": "^3.2.6",
     "isomorphic-dompurify": "^2.26.0",
     "next": "^15.4.6",
