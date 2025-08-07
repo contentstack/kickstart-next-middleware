@@ -8,9 +8,18 @@ export async function GET(request: Request) {
   const entry_uid = searchParams.get("entry_uid")
   const live_preview = searchParams.get("live_preview")
 
-  const region = getRegionForString(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION as string);
-  const endpoints = getContentstackEndpoints(region, true)
-  const hostname = live_preview ? endpoints.preview : endpoints.contentDelivery
+  // Use custom endpoints if provided, otherwise fall back to region-based endpoints
+  // For internal testing purposes at Contentstack we look for a custom region/hostnames in the env vars, you do not have to do this.
+  let hostname: string;
+  if (process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW_HOST && process.env.NEXT_PUBLIC_CONTENTSTACK_CONTENT_DELIVERY) {
+    hostname = live_preview
+      ? process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW_HOST
+      : process.env.NEXT_PUBLIC_CONTENTSTACK_CONTENT_DELIVERY;
+  } else {
+    const region = getRegionForString(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION as string);
+    const endpoints = getContentstackEndpoints(region, true);
+    hostname = (live_preview ? endpoints.preview : endpoints.contentDelivery) as string;
+  }
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -24,6 +33,7 @@ export async function GET(request: Request) {
 
   const environment = process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT as string;
   const url = `https://${hostname}/v3/content_types/${content_type_uid}/entries/${entry_uid}?environment=${environment}`
+
 
   const res = await fetch(url, {
     method: "GET",
