@@ -13,7 +13,9 @@ export default async function Home({
   const { live_preview } = await searchParams;
 
   if (!entry_uid) {
-    entry_uid = "blte55cf3411ecaee0e";
+    entry_uid =
+      (process.env.NEXT_PUBLIC_CONTENTSTACK_CONTENT_TYPE_UID as string) ||
+      "blte55cf3411ecaee0e";
   }
 
   if (!content_type_uid) {
