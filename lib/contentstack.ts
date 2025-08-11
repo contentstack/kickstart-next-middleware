@@ -14,7 +14,10 @@ export function initLivePreview() {
       environment: process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT as string,
     },
     clientUrlParams: {
-      host: endpoints.application,
+      // Setting the client URL parameters for live preview
+      // for internal testing purposes at Contentstack we look for a custom host in the env vars, you do not have to do this.
+      host: process.env.NEXT_PUBLIC_CONTENTSTACK_CONTENT_APPLICATION || endpoints && endpoints.application
+
     },
     editButton: {
       enable: true,
