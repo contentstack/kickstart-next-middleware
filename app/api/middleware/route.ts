@@ -5,12 +5,21 @@ import { getContentstackEndpoints, getRegionForString } from "@timbenniks/conten
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const content_type_uid = searchParams.get("content_type_uid")
-  const entry_uid = searchParams.get("entry_uid")
+  const pageUrl = searchParams.get("url")
   const live_preview = searchParams.get("live_preview")
 
-  const region = getRegionForString(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION as string);
-  const endpoints = getContentstackEndpoints(region, true)
-  const hostname = live_preview ? endpoints.preview : endpoints.contentDelivery
+  // Use custom endpoints if provided, otherwise fall back to region-based endpoints
+  // For internal testing purposes at Contentstack we look for a custom region/hostnames in the env vars, you do not have to do this.
+  let hostname: string;
+  if (process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW_HOST && process.env.NEXT_PUBLIC_CONTENTSTACK_CONTENT_DELIVERY) {
+    hostname = live_preview
+      ? process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW_HOST
+      : process.env.NEXT_PUBLIC_CONTENTSTACK_CONTENT_DELIVERY;
+  } else {
+    const region = getRegionForString(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION as string);
+    const endpoints = getContentstackEndpoints(region, true);
+    hostname = (live_preview ? endpoints.preview : endpoints.contentDelivery) as string;
+  }
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
@@ -23,15 +32,23 @@ export async function GET(request: Request) {
   }
 
   const environment = process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT as string;
-  const url = `https://${hostname}/v3/content_types/${content_type_uid}/entries/${entry_uid}?environment=${environment}`
 
-  const res = await fetch(url, {
+  // Create query to find entry by URL
+  const query = JSON.stringify({ url: pageUrl });
+  const apiUrl = `https://${hostname}/v3/content_types/${content_type_uid}/entries?environment=${environment}&query=${encodeURIComponent(query)}`
+
+  const res = await fetch(apiUrl, {
     method: "GET",
     headers: headers,
   });
 
   const result = await res.json();
-  const { entry } = result
+  const { entries } = result
+  const entry = entries && entries.length > 0 ? entries[0] : null;
+
+  if (!entry) {
+    return NextResponse.json({ error: 'Entry not found' }, { status: 404 });
+  }
 
   if (process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW) {
     contentstack.Utils.addEditableTags(entry, 'page', true);
