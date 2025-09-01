@@ -8,7 +8,7 @@ export default async function Home({
 }: {
   searchParams: Promise<any>;
 }) {
-  await headers();
+  const headersList = await headers();
   let { url, content_type_uid } = await searchParams;
   const { live_preview } = await searchParams;
 
@@ -21,13 +21,18 @@ export default async function Home({
   }
 
   const getContent = async () => {
+    // Get the current host from headers or fall back to environment variable
+    const host = headersList.get("host") || "localhost:3000";
+    const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+    const baseUrl = `${protocol}://${host}`;
+
     const result = await fetch(
-      // This could be any external URL
+      // Dynamic URL that works on any server
       live_preview
-        ? `http://localhost:3000/api/middleware?content_type_uid=${content_type_uid}&url=${encodeURIComponent(
+        ? `${baseUrl}/api/middleware?content_type_uid=${content_type_uid}&url=${encodeURIComponent(
             url
           )}&live_preview=${live_preview}`
-        : `http://localhost:3000/api/middleware?content_type_uid=${content_type_uid}&url=${encodeURIComponent(
+        : `${baseUrl}/api/middleware?content_type_uid=${content_type_uid}&url=${encodeURIComponent(
             url
           )}`
     );
