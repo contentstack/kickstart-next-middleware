@@ -7,6 +7,7 @@ export async function GET(request: Request) {
   const content_type_uid = searchParams.get("content_type_uid")
   const pageUrl = searchParams.get("url")
   const live_preview = searchParams.get("live_preview")
+  const preview_timestamp = searchParams.get("preview_timestamp")
 
   // Use custom endpoints if provided, otherwise fall back to region-based endpoints
   // For internal testing purposes at Contentstack we look for a custom region/hostnames in the env vars, you do not have to do this.
@@ -29,6 +30,9 @@ export async function GET(request: Request) {
   if (live_preview) {
     headers.append("live_preview", live_preview as string);
     headers.append("preview_token", process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW_TOKEN as string);
+    if (preview_timestamp) {
+      headers.append("preview_timestamp", preview_timestamp as string);
+    }
   }
 
   const environment = process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT as string;
