@@ -27,7 +27,7 @@ export function initLivePreview() {
   });
 }
 
-export async function getPage(baseUrl: string, url: string, contentTypeUid: string = "page") {
+export async function getPage(baseUrl: string, url: string, contentTypeUid: string = "page", previewTimestamp?: string) {
   const livePreviewHash = ContentstackLivePreview.hash;
   const apiUrl = new URL('/api/middleware', baseUrl);
   apiUrl.searchParams.set('content_type_uid', contentTypeUid);
@@ -35,6 +35,10 @@ export async function getPage(baseUrl: string, url: string, contentTypeUid: stri
 
   if (livePreviewHash) {
     apiUrl.searchParams.set('live_preview', livePreviewHash);
+  }
+
+  if (previewTimestamp) {
+    apiUrl.searchParams.set('preview_timestamp', previewTimestamp);
   }
 
   const result = await fetch(apiUrl);

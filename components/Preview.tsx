@@ -5,6 +5,8 @@
 import { useState, useEffect, useCallback } from "react";
 // Importing Contentstack Live Preview utilities for real-time content updates
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
+// Importing Next.js hook to access URL search parameters
+import { useSearchParams } from "next/navigation";
 // Importing functions to fetch page data and initialize live preview
 import { getPage, initLivePreview } from "@/lib/contentstack";
 // Importing Page type definition with alias to avoid naming conflicts
@@ -27,15 +29,25 @@ export default function Preview({
   path: string;
   baseUrl: string;
 }) {
+  // Get search parameters from the current URL
+  const searchParams = useSearchParams();
+  // Extract preview_timestamp query parameter
+  const previewTimestamp = searchParams.get("preview_timestamp");
+
   // State to store the fetched page data
   const [page, setPage] = useState<PageProps>();
 
   // Memoized function to fetch content data based on the current path
   // useCallback prevents unnecessary re-renders when path doesn't change
   const getContent = useCallback(async () => {
-    const data = await getPage(baseUrl, path); // Fetch page data from Contentstack
+    const data = await getPage(
+      baseUrl,
+      path,
+      "page",
+      previewTimestamp || undefined
+    ); // Fetch page data from Contentstack
     setPage(data); // Update state with fetched data
-  }, [path, baseUrl]); // Dependency array - function recreated only when path changes
+  }, [path, baseUrl, previewTimestamp]); // Dependency array - function recreated only when path changes
 
   // Effect hook to initialize live preview and set up content change listener
   useEffect(() => {
