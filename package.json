@@ -19,7 +19,7 @@
   "dependencies": {
     "@contentstack/delivery-sdk": "^5.1.2",
     "@contentstack/live-preview-utils": "^4.4.0",
-    "@timbenniks/contentstack-endpoints": "^2.1.0",
+    "@timbenniks/contentstack-endpoints": "^3.0.2",
     "isomorphic-dompurify": "^3.8.0",
     "next": "^16.2.3",
     "react": "^19.2.5",
