@@ -1,6 +1,6 @@
 {
   "name": "kickstart-next-middleware",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "private": false,
   "repository": {
     "type": "git",
@@ -17,13 +17,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@contentstack/delivery-sdk": "^5.1.2",
-    "@contentstack/live-preview-utils": "^4.4.0",
+    "@contentstack/delivery-sdk": "^5.2.1",
+    "@contentstack/live-preview-utils": "^4.4.4",
     "@timbenniks/contentstack-endpoints": "^3.0.2",
-    "isomorphic-dompurify": "^3.8.0",
-    "next": "^16.2.6",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "isomorphic-dompurify": "^3.17.0",
+    "next": "^16.2.9",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -38,8 +38,8 @@
   },
   "overrides": {
     "follow-redirects": "^1.16.0",
-    "dompurify": "3.4.0",
-    "postcss": "8.5.10",
+    "dompurify": "3.4.10",
+    "postcss": "8.5.15",
     "qs": "^6.15.2"
   }
 }
