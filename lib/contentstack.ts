@@ -1,10 +1,10 @@
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
-import { getContentstackEndpoints, getRegionForString } from "@timbenniks/contentstack-endpoints";
+import { getContentstackEndpoint, type ContentstackEndpoints } from "@contentstack/utils";
 
 export const isPreview = process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW === "true";
 
-const region = getRegionForString(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION as string)
-const endpoints = getContentstackEndpoints(region, true)
+// region resolution is now handled by getContentstackEndpoint
+const endpoints = getContentstackEndpoint(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION || 'us', '', true) as ContentstackEndpoints
 
 export function initLivePreview() {
   ContentstackLivePreview.init({
@@ -17,8 +17,8 @@ export function initLivePreview() {
     },
     clientUrlParams: {
       // Setting the client URL parameters for live preview
-      // for internal testing purposes at Contentstack we look for a custom host in the env vars, you do not have to do this.
-      host: process.env.NEXT_PUBLIC_CONTENTSTACK_CONTENT_APPLICATION || endpoints && endpoints.application
+      // for custom or dedicated Contentstack environments, override each endpoint individually using environment variables.
+      host: process.env.NEXT_PUBLIC_CONTENTSTACK_CONTENT_APPLICATION || endpoints.application as string
     },
     editButton: {
       enable: true, // Enabling the edit button for live preview
