@@ -43,6 +43,6 @@
     "qs": "^6.15.2"
   },
   "optionalDependencies": {
-    "lightningcss-linux-x64-gnu": "*"
+    "lightningcss-linux-x64-gnu": "^1.32.0"
   }
 }
