@@ -4,7 +4,7 @@ import { getContentstackEndpoint, type ContentstackEndpoints } from "@contentsta
 export const isPreview = process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW === "true";
 
 // region resolution is now handled by getContentstackEndpoint
-const endpoints = getContentstackEndpoint(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION || 'us', '', true) as ContentstackEndpoints
+const endpoints = getContentstackEndpoint(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION || 'NA', '', true) as ContentstackEndpoints
 
 export function initLivePreview() {
   ContentstackLivePreview.init({
