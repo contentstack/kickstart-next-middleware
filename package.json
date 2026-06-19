@@ -1,6 +1,6 @@
 {
   "name": "kickstart-next-middleware",
-  "version": "1.0.20",
+  "version": "1.1.0",
   "private": false,
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   "dependencies": {
     "@contentstack/delivery-sdk": "^5.2.1",
     "@contentstack/live-preview-utils": "^4.4.4",
-    "@timbenniks/contentstack-endpoints": "^3.0.2",
+    "@contentstack/utils": "^1.9.1",
     "isomorphic-dompurify": "^3.17.0",
     "next": "^16.2.9",
     "react": "^19.2.7",
@@ -38,8 +38,11 @@
   },
   "overrides": {
     "follow-redirects": "^1.16.0",
-    "dompurify": "3.4.10",
+    "dompurify": "3.4.11",
     "postcss": "8.5.15",
     "qs": "^6.15.2"
+  },
+  "optionalDependencies": {
+    "lightningcss-linux-x64-gnu": "^1.32.0"
   }
 }
